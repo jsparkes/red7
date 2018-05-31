@@ -35,11 +35,7 @@ module Library =
     }
 
     let initialDeck = 
-        seq {
-            for n in 1y..7y do
-                for c in CardColors do
-                    yield { Color = c; Number = CardNumber(n) }
-        } 
-        |> Seq.toList
-        |> List.sortBy (fun _ ->  rng.Next())
-
+        [ for n in 1y..7y do
+            for c in CardColors ->
+                { Color = c; Number = CardNumber(n) } ]
+        |> List.sortBy (fun _ -> rng.Next())
