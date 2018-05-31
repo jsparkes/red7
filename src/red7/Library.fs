@@ -9,6 +9,8 @@ namespace red7
 ///
 module Library = 
     open System
+
+    let rng = System.Random()
   
     // In order from lowest to highest
     type CardColor = 
@@ -32,22 +34,12 @@ module Library =
         Number : CardNumber
     }
 
-    // https://gist.github.com/kristopherjohnson/aab3b42911e25c3ec352
-    let shuffleInPlace (array : 'a[]) =
-        let swap i j =
-            let temp = array.[i]
-            array.[i] <- array.[j]
-            array.[j] <- temp
-        let random = new Random()
-        let len = array.Length
-        [0..len-2] |> Seq.iter(fun i -> swap i (random.Next(i, len)))
-        array
-
-    let deck = 
+    let initialDeck = 
         seq {
             for n in 1y..7y do
                 for c in CardColors do
                     yield { Color = c; Number = CardNumber(n) }
         } 
-        |> Seq.toArray
-        |> shuffleInPlace
+        |> Seq.toList
+        |> List.sortBy (fun _ ->  rng.Next())
+
