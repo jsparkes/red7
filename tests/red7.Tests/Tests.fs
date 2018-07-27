@@ -1,10 +1,14 @@
 module red7.Tests
 
 open red7
+open red7.Library
 open NUnit.Framework
 
 [<Test>]
-let ``hello returns 42`` () =
-  let result = Library.hello 42
-  printfn "%i" result
-  Assert.AreEqual(42,result)
+let ``Dealing A Card`` () =
+    let game = Game(1)
+    game.Start()
+    let card = game.Deck.Head
+    Assert.IsFalse(game.Players.Head.HasCard(card))
+    game.DealACard(game.Players.Head)
+    Assert.IsTrue(game.Players.Head.HasCard(card))
