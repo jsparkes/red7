@@ -65,7 +65,7 @@ module Library =
 
         member x.DealACard(player: Player) =
             match x.Deck with
-            | [] -> x.GameOver()
+            | [] -> x.DeckEmpty()
             | top::rest ->
                 x.Deck <- rest
                 player.ReceiveCard(top)
@@ -77,4 +77,4 @@ module Library =
                 for j in 0..6 do
                     x.DealACard p
 
-        member x.GameOver() = ()
+        member x.DeckEmpty() = ()
