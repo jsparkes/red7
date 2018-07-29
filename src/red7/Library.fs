@@ -57,7 +57,7 @@ module Library =
 
     and Game(numOfPlayers: int) =
 
-        member val Players = List<Player>.Empty with get, set
+        member val Players = List<Player>.Empty with get, set 
         member val Deck = initialDeck with get, set
         // This doesn't really have to be a stack.
         // We could just save the topmost card.
