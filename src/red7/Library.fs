@@ -2,13 +2,12 @@ namespace red7
 
 open System.Linq;
 
-/// Documentation for my library
-///
-/// ## Example
-///
-///     let h = Library.hello 1
-///     printfn "%d" h
-///
+// Using the Red 7 game (https://boardgamegeek.com/boardgame/161417/red7)
+// to learn about machine learning for games.
+// It may actually be a bad choice, since a wrong move immediately ends the game!
+// Not much learning there, except to avoid losing moves.  Maybe there's
+// enough in the scoring to try maximizing?
+
 module Library =
     open System
 
