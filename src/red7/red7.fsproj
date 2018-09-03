@@ -58,6 +58,7 @@
     <None Include="paket.template" />
     <Content Include="App.config" />
     <Content Include="packages.config" />
+    <Compile Include="Tests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
