@@ -77,3 +77,17 @@ module Library =
                     x.DealACard p
 
         member x.DeckEmpty() = ()
+
+    and Rule(card: Card) =
+
+        member x.Check(game: Game, player: Player) =
+            match card.Color with
+            | CardColor.Red -> x.CheckHighest(game, player)
+            | CardColor.Orange -> x.CheckMostNumber(game, player)
+            | CardColor.Yellow -> x.CheckMostColor(game, player)
+            | CardColor.Green -> x.CheckMostEven(game, player)
+            | CardColor.Blue -> x.CheckDifferentColors(game, player)
+            | CardColor.Indigo -> x.CheckSequence(game, player)
+            | CardColor.Violet -> x.CheckBelowFour(game, player)
+
+
