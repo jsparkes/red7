@@ -90,4 +90,11 @@ module Library =
             | CardColor.Indigo -> x.CheckSequence(game, player)
             | CardColor.Violet -> x.CheckBelowFour(game, player)
 
-
+        member x.CheckHighest(game: Game, player: Player) = false
+        member x.CheckMostNumber(game: Game, player: Player) = false
+        member x.CheckMostColor(game: Game, player: Player) = false
+        member x.CheckMostEven(game: Game, player: Player) = false
+        member x.CheckMostOdd(game: Game, player: Player) = false
+        member x.CheckDifferentColors(game: Game, player: Player) = false
+        member x.CheckSequence(game: Game, player: Player) = false
+        member x.CheckBelowFour(game: Game, player: Player) = false
