@@ -47,4 +47,26 @@ let ``Sort By CardNumber`` () =
     //            |> List.sort
     //printfn "%O" deck
 
+[<Test>]
+let ``Deck HighestCard`` () =
+    let card1 = Deck.Random.HighestCard()
+    match card1 with
+    | None -> Assert.Fail "No highest card returned" |> ignore
+    | Some c -> Assert.AreEqual(7, c.Number.Number)
+    let card2 = Deck.Empty.HighestCard()
+    match card2 with
+    | None -> Assert.Pass
+    | Some c -> Assert.Fail
+    ()
 
+[<Test>]
+let ``Deck LowestCard`` () =
+    let card1 = Deck.Random.LowestCard()
+    match card1 with
+    | None -> Assert.Fail "No highest card returned" |> ignore
+    | Some c -> Assert.AreEqual(1, c.Number.Number)
+    let card2 = Deck.Empty.LowestCard()
+    match card2 with
+    | None -> Assert.Pass
+    | Some c -> Assert.Fail
+    ()

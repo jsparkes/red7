@@ -68,6 +68,21 @@ module Library =
 
         member x.DeckEmpty() = ()
 
+        member x.HighestCard() =
+            match x.Cards with
+            | [] -> None
+            | cards -> Some (cards
+                                |> List.sortBy (fun c -> - c.Number.Number)
+                                |> List.head)
+
+        member x.LowestCard() =
+            match x.Cards with
+            | [] -> None
+            | cards -> Some (cards
+                                |> List.sortBy (fun c -> c.Number.Number)
+                                |> List.head)
+
+
     and Player(name: string, game: Game) =
 
         member val Name = name
