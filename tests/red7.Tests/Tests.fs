@@ -8,12 +8,16 @@ let rng = System.Random()
 
 [<Test>]
 let ``Dealing A Card`` () =
-    let game = Game(1)
+    let game = Game 1
     game.Start()
-    let card = game.Deck.Head
-    Assert.IsFalse(game.Players.Head.HasCard(card))
-    game.DealACard(game.Players.Head)
-    Assert.IsTrue(game.Players.Head.HasCard(card))
+    let player = game.Players.Head
+    let deck = Deck.Random
+    let card = deck.Top()
+    Assert.IsTrue(deck.Contains(card.Value))
+    Assert.IsFalse(player.HasCard(card.Value))
+    deck.DealACard(game.Players.Head)
+    Assert.IsFalse(deck.Contains(card.Value))
+    Assert.IsTrue(player.HasCard(card.Value))
 
 [<Test>]
 let ``Sort By Color`` () =
