@@ -50,23 +50,30 @@ let ``Sort By CardNumber`` () =
 [<Test>]
 let ``Deck HighestCard`` () =
     let card1 = Deck.Random.HighestCard()
-    match card1 with
-    | None -> Assert.Fail "No highest card returned" |> ignore
-    | Some c -> Assert.AreEqual(7, c.Number.Number)
+    Assert.AreEqual(7y, card1)
     let card2 = Deck.Empty.HighestCard()
-    match card2 with
-    | None -> Assert.Pass
-    | Some c -> Assert.Fail
-    ()
+    Assert.AreEqual(0y, card2)
 
 [<Test>]
 let ``Deck LowestCard`` () =
     let card1 = Deck.Random.LowestCard()
-    match card1 with
-    | None -> Assert.Fail "No highest card returned" |> ignore
-    | Some c -> Assert.AreEqual(1, c.Number.Number)
+    Assert.AreEqual(1y, card1)
     let card2 = Deck.Empty.LowestCard()
-    match card2 with
-    | None -> Assert.Pass
-    | Some c -> Assert.Fail
-    ()
+    Assert.AreEqual(0y, card2)
+
+[<Test>]
+let ``Rule CheckHighest`` () =
+    let ruleCard = { Color = CardColor.Red; Number = CardNumber 1y }
+    let rule = Rule ruleCard
+    let game1 = Game 4
+    game1.Start()
+    let allHighest = 
+        [for player in game1.Players do
+            yield player.Hand.HighestCard()]
+    let max = List.max allHighest
+    for player in game1.Players do
+        if max = player.Hand.HighestCard() then
+            Assert.IsTrue(rule.Check(game1, player))
+        else
+            Assert.IsFalse(rule.Check(game1, player))
+

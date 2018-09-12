@@ -51,7 +51,7 @@ module Library =
         member x.Top() = 
             match x.Cards with
             | [] -> None
-            | c -> Some (List.head x.Cards)
+            | c -> Some (List.head c)
 
         member x.Contains(card) =
             x.Cards.Contains(card)
@@ -70,18 +70,20 @@ module Library =
 
         member x.HighestCard() =
             match x.Cards with
-            | [] -> None
-            | cards -> Some (cards
-                                |> List.sortBy (fun c -> - c.Number.Number)
-                                |> List.head)
+            | [] -> 0y
+            | cards -> cards
+                            |> List.map (fun c -> - c.Number.Number)
+                            |> List.sort
+                            |> List.head
+                            |> (fun n -> - n)
 
         member x.LowestCard() =
             match x.Cards with
-            | [] -> None
-            | cards -> Some (cards
-                                |> List.sortBy (fun c -> c.Number.Number)
-                                |> List.head)
-
+            | [] -> 0y
+            | cards -> cards
+                            |> List.map (fun c -> c.Number.Number)
+                            |> List.sort
+                            |> List.head
 
     and Player(name: string, game: Game) =
 
@@ -123,7 +125,12 @@ module Library =
             | CardColor.Indigo -> x.CheckSequence(game, player)
             | CardColor.Violet -> x.CheckBelowFour(game, player)
 
-        member x.CheckHighest(game: Game, player: Player) = false
+        member x.CheckHighest(game: Game, player: Player) =
+            // I could have done this in one pipeline, but this is clearer.
+            let allHands = game.Players |> List.map (fun player -> player.Hand)
+            let max = allHands |> List.map (fun deck -> deck.HighestCard()) |> List.max
+            max = player.Hand.HighestCard()
+            
         member x.CheckMostNumber(game: Game, player: Player) = false
         member x.CheckMostColor(game: Game, player: Player) = false
         member x.CheckMostEven(game: Game, player: Player) = false
