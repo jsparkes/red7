@@ -35,21 +35,43 @@ module Library =
         Number : CardNumber
     }
 
-    let initialDeck =
-        [ for n in 1y..7y do
-            for c in CardColors ->
-                { Color = c; Number = CardNumber(n) } ]
-        |> List.sortBy (fun _ -> rng.Next())
+    type Deck(initial: List<Card>) =
+        member val Cards = initial with get, set
 
-    type Player(name: string, game: Game) =
+        static member Random =
+            [ for n in 1y..7y do
+                for c in CardColors ->
+                    { Color = c; Number = CardNumber(n) } ]
+            |> List.sortBy (fun _ -> rng.Next())
+            |> Deck
+
+        static member Empty =
+            Deck List.empty<Card>
+
+        member x.Contains(card) =
+            x.Cards.Contains(card)
+
+        member x.AddCard(card) =
+            x.Cards <- List.append x.Cards (List.singleton card)
+
+        member x.DealACard(player: Player) =
+            match x.Cards with
+            | [] -> x.DeckEmpty()
+            | top::rest ->
+                x.Cards <- rest
+                player.ReceiveCard(top)
+
+        member x.DeckEmpty() = ()
+
+    and Player(name: string, game: Game) =
 
         member val Name = name
         member val Game = game
-        member val Hand = List.empty<Card> with get, set
+        member val Hand = Deck.Empty
         member val Tableau = List.empty<Card> with get, set
 
         member x.ReceiveCard(card: Card) =
-            x.Hand <- card :: x.Hand
+            x.Hand.AddCard(card)
 
         member x.HasCard(card: Card) =
             x.Hand.Contains(card)
@@ -57,26 +79,17 @@ module Library =
     and Game(numOfPlayers: int) =
 
         member val Players = List<Player>.Empty with get, set 
-        member val Deck = initialDeck with get, set
+        member val Deck = Deck.Random with get, set
         // This doesn't really have to be a stack.
         // We could just save the topmost card.
         member val Rule = List.empty<Card> with get, set
-
-        member x.DealACard(player: Player) =
-            match x.Deck with
-            | [] -> x.DeckEmpty()
-            | top::rest ->
-                x.Deck <- rest
-                player.ReceiveCard(top)
 
         member x.Start() =
             x.Players <- [ for i in 1..numOfPlayers ->
                                 Player("Player " + i.ToString(), x) ]
             for p in x.Players do
                 for j in 0..6 do
-                    x.DealACard p
-
-        member x.DeckEmpty() = ()
+                    x.Deck.DealACard p
 
     and Rule(card: Card) =
 
