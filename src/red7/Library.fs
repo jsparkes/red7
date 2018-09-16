@@ -34,6 +34,33 @@ module Library =
         member val Color = color
         member val Number = CardNumber num
 
+        override x.ToString() =
+            x.Color.ToString() + ": " + x.Number.Number.ToString()
+
+        interface IComparable<Card> with
+            member x.CompareTo other =
+                // Use tuple comparison
+                compare (x.Color, x.Number.Number) (other.Color, other.Number.Number)
+
+        interface IComparable with
+            member x.CompareTo obj =
+                match obj with
+                | null -> 1
+                | :? Card as other -> compare (x.Color, x.Number.Number) (other.Color, other.Number.Number)
+                | _ -> invalidArg "other" "not a Card"
+
+        interface IEquatable<Card> with
+            member x.Equals other =
+                other.Color = x.Color && other.Number.Number = x.Number.Number
+
+        override x.Equals obj =
+            match obj with
+            | :? Card as other -> other.Color = x.Color && other.Number = x.Number
+            | _ -> false
+
+        override x.GetHashCode () =
+            hash (x.Color, x.Number.Number)
+
     type Deck(initial: List<Card>) =
         member val Cards = initial with get, set
 

@@ -7,6 +7,26 @@ open NUnit.Framework
 let rng = System.Random()
 
 [<Test>]
+let ``Card Equality`` () =
+    let one = Card(CardColor.Red, 5y)
+    Assert.AreEqual(one, one)
+    let two = Card(CardColor.Red, 5y)
+    Assert.AreEqual(one, two)
+    let three = Card(CardColor.Blue, 5y)
+    Assert.AreNotEqual(one, three)
+    let four = Card(CardColor.Red, 1y)
+    Assert.AreNotEqual(two, four)
+    Assert.AreNotEqual(three, four)
+
+[<Test>]
+let ``Card IComparable`` () =
+    let deck = Deck.Random.Cards |> List.sort
+    let card = List.head deck
+    Assert.AreEqual(Card(CardColor.Violet, 1y), card)
+    let rev = List.rev deck
+    Assert.AreEqual(Card(CardColor.Red, 7y), List.head rev)
+
+[<Test>]
 let ``Dealing A Card`` () =
     let game = Game 1
     game.Start()
