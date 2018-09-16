@@ -30,10 +30,9 @@ module Library =
     type CardNumber(n : int8) =
         member val Number = n
 
-    type Card = {
-        Color : CardColor
-        Number : CardNumber
-    }
+    type Card(color: CardColor, num: int8) =
+        member val Color = color
+        member val Number = CardNumber num
 
     type Deck(initial: List<Card>) =
         member val Cards = initial with get, set
@@ -41,7 +40,7 @@ module Library =
         static member Random =
             [ for n in 1y..7y do
                 for c in CardColors ->
-                    { Color = c; Number = CardNumber(n) } ]
+                    Card(c, n) ]
             |> List.sortBy (fun _ -> rng.Next())
             |> Deck
 

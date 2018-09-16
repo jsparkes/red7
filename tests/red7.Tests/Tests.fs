@@ -30,15 +30,15 @@ let ``Sort By Color`` () =
 let ``Sort By CardColor`` () =
     let deck = CardColors
                 |> List.sortBy  (fun _ -> rng.Next())
-                |> List.map (fun c -> Some({ Color = c; Number = CardNumber(1y)}))
+                |> List.map (fun c -> Some(Card(c, 1y)))
                 // |> List.sort
     ()
 
 [<Test>]
 let ``Sort By CardNumber`` () =
     let nums = [1y..7y] |> List.sortBy (fun _ -> rng.Next())
-    let cards = [for n in nums do
-                    yield { Color = CardColor.Violet; Number = CardNumber n}]
+    let cards = [for n in nums ->
+                    Card(CardColor.Violet, n) ]
     ()
     //let sorted = List.sort cards
     //let deck = CardColors
@@ -63,7 +63,7 @@ let ``Deck LowestCard`` () =
 
 [<Test>]
 let ``Rule CheckHighest`` () =
-    let ruleCard = { Color = CardColor.Red; Number = CardNumber 1y }
+    let ruleCard = Card(CardColor.Red, 1y)
     let rule = Rule ruleCard
     let game1 = Game 4
     game1.Start()
