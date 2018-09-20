@@ -115,6 +115,9 @@ module Library =
                             |> List.sort
                             |> List.head
 
+        member x.CountDifferentColors() =
+            x.Cards |> List.groupBy (fun card -> card.Color) |> List.length
+
     and Player(name: string, game: Game) =
 
         member val Name = name
