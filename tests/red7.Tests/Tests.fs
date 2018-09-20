@@ -104,10 +104,11 @@ let ``Rule CheckHighest`` () =
     let rule = Rule ruleCard
     let game1 = Game 4
     game1.Start()
-    let allHighest = 
-        [for player in game1.Players do
-            yield player.Hand.HighestCard()]
-    let max = List.max allHighest
+    // We cheat here by using the Hand instead of Tableau
+    // to make the test easier to construct.
+    let max =
+        [for player in game1.Players -> player.Hand.HighestCard()]
+        |> List.max
     for player in game1.Players do
         if max = player.Hand.HighestCard() then
             Assert.IsTrue(rule.Check(game1, player))
