@@ -55,7 +55,7 @@ module Library =
 
         override x.Equals obj =
             match obj with
-            | :? Card as other -> other.Color = x.Color && other.Number = x.Number
+            | :? Card as other -> other.Color = x.Color && other.Number.Number = x.Number.Number
             | _ -> false
 
         override x.GetHashCode () =
