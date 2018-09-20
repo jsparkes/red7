@@ -116,7 +116,7 @@ module Library =
         member val Name = name
         member val Game = game
         member val Hand = Deck.Empty
-        member val Tableau = List.empty<Card> with get, set
+        member val Tableau = Deck.Empty with get, set
 
         member x.ReceiveCard(card: Card) =
             x.Hand.AddCard(card)
