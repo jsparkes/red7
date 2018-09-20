@@ -27,6 +27,15 @@ let ``Card IComparable`` () =
     Assert.AreEqual(Card(CardColor.Red, 7y), List.head rev)
 
 [<Test>]
+let ``Player IComparable`` () =
+    let game = Game(2)
+    game.Start()
+    let p1 = List.item 0 game.Players
+    let p2 = List.item 1 game.Players
+    Assert.AreEqual(p1, p1)
+    Assert.AreNotEqual(p1, p2)
+
+[<Test>]
 let ``Dealing A Card`` () =
     let game = Game 1
     game.Start()

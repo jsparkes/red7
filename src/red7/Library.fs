@@ -124,6 +124,26 @@ module Library =
         member x.HasCard(card: Card) =
             x.Hand.Contains(card)
 
+        interface IComparable<Player> with
+            member x.CompareTo other =
+                // Use tuple comparison
+                compare (x.Name) (other.Name)
+
+        interface IComparable with
+            member x.CompareTo obj =
+                match obj with
+                | null -> 1
+                | :? Player as other -> compare (x.Name) (other.Name)
+                | _ -> invalidArg "other" "not a Player"
+
+        override x.Equals(obj) =
+            match obj with
+            | :? Player as other -> other.Name = x.Name
+            | _ -> false
+
+        override x.GetHashCode() =
+            x.Name.GetHashCode()
+
     and Game(numOfPlayers: int) =
 
         member val Players = List<Player>.Empty with get, set 
