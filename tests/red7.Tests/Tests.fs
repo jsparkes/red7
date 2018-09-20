@@ -36,6 +36,14 @@ let ``Player IComparable`` () =
     Assert.AreNotEqual(p1, p2)
 
 [<Test>]
+let ``Deck Remove A Card`` () =
+    let deck = Deck.Random
+    let card = Card(CardColor.Orange, 3y)
+    Assert.IsTrue(deck.Contains card)
+    deck.RemoveCard(card)
+    Assert.IsFalse(deck.Contains card)
+
+[<Test>]
 let ``Dealing A Card`` () =
     let game = Game 1
     game.Start()

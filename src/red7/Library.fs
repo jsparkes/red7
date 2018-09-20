@@ -85,6 +85,10 @@ module Library =
         member x.AddCard(card) =
             x.Cards <- List.append x.Cards (List.singleton card)
 
+        member x.RemoveCard(card) =
+            // x.Cards <- x.Cards |> List.except (List.singleton card)
+            x.Cards <- x.Cards |> List.filter (fun c -> c <> card)
+
         member x.DealACard(player: Player) =
             match x.Cards with
             | [] -> x.DeckEmpty()
