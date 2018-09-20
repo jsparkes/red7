@@ -184,14 +184,22 @@ module Library =
 
         member x.CheckHighest(game: Game, player: Player) =
             // I could have done this in one pipeline, but this is clearer.
-            let allHands = game.Players |> List.map (fun player -> player.Hand)
-            let max = allHands |> List.map (fun deck -> deck.HighestCard()) |> List.max
-            max = player.Hand.HighestCard()
+            let allTableaus = game.Players |> List.map (fun player -> player.Tableau)
+            let max = allTableaus |> List.map (fun deck -> deck.HighestCard()) |> List.max
+            max = player.Tableau.HighestCard()
             
         member x.CheckMostNumber(game: Game, player: Player) = false
         member x.CheckMostColor(game: Game, player: Player) = false
         member x.CheckMostEven(game: Game, player: Player) = false
         member x.CheckMostOdd(game: Game, player: Player) = false
-        member x.CheckDifferentColors(game: Game, player: Player) = false
+
+        member x.CheckDifferentColors(game: Game, player: Player) =
+            let map =
+                [for p in game.Players do
+                    yield p, p.Tableau.CountDifferentColors()]
+                |> Map.ofList
+            let max = map |> Map.toList |> List.map snd |> List.max
+            max = map.[player]
+
         member x.CheckSequence(game: Game, player: Player) = false
         member x.CheckBelowFour(game: Game, player: Player) = false
