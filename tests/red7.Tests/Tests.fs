@@ -57,6 +57,18 @@ let ``Dealing A Card`` () =
     Assert.IsTrue(player.HasCard(card.Value))
 
 [<Test>]
+let ``Play A Card`` () =
+    let game = Game 1
+    game.Start()
+    let player = game.Players.Head
+    let card = player.Hand.Top()
+    Assert.IsTrue(player.Hand.Contains card.Value)
+    Assert.IsFalse(player.Tableau.Contains card.Value)
+    player.PlayACard(card.Value)
+    Assert.IsFalse(player.Hand.Contains card.Value)
+    Assert.IsTrue(player.Tableau.Contains card.Value)
+
+[<Test>]
 let ``Sort By Color`` () =
     let cols = CardColors
                 |> List.sortBy  (fun _ -> rng.Next())

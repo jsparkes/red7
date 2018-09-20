@@ -128,6 +128,10 @@ module Library =
         member x.HasCard(card: Card) =
             x.Hand.Contains(card)
 
+        member x.PlayACard(card: Card) =
+            x.Hand.RemoveCard card
+            x.Tableau.AddCard card
+
         interface IComparable<Player> with
             member x.CompareTo other =
                 // Use tuple comparison
