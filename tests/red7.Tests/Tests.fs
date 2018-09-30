@@ -127,3 +127,12 @@ let ``Rule CheckHighest`` () =
         else
             Assert.IsFalse(rule.Check(game1, player))
 
+[<Test>]
+let ``Rule CheckMost`` () =
+    let src = Deck.Random
+    let dst = Deck.Empty
+    for i in 1..20 do
+        src.Cards |> List.item i |> dst.AddCard
+    let c = dst.CountColors()
+    c = 5
+
