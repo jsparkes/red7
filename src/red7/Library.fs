@@ -206,4 +206,12 @@ module Library =
             x.CheckMaxScore (game, player, score)
 
         member x.CheckSequence(game: Game, player: Player) = false
-        member x.CheckBelowFour(game: Game, player: Player) = false
+
+        member x.CheckBelowFour(game: Game, player: Player) =
+            let score (player: Player) =
+                match player.Tableau.Cards with
+                | [] -> 0
+                | cards -> cards
+                            |> List.filter (fun card -> card.Number.Number < 4y)
+                            |> List.length
+            x.CheckMaxScore (game, player, score)
