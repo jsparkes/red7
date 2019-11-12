@@ -198,8 +198,25 @@ module Library =
 
         member x.CheckMostNumber(game: Game, player: Player) = false
         member x.CheckMostColor(game: Game, player: Player) = false
-        member x.CheckMostEven(game: Game, player: Player) = false
-        member x.CheckMostOdd(game: Game, player: Player) = false
+        member x.CheckMostEven(game: Game, player: Player) =
+            let isEven (card: Card) = card.Number.Number &&& 1y = 0y
+            let score (player: Player) =
+                match player.Tableau.Cards with
+                | [] -> 0
+                | cards -> cards
+                            |> List.filter isEven
+                            |> List.length
+            x.CheckMaxScore (game, player, score)
+
+        member x.CheckMostOdd(game: Game, player: Player) =
+            let isOdd (card: Card) = card.Number.Number &&& 1y = 1y
+            let score (player: Player) =
+                match player.Tableau.Cards with
+                | [] -> 0
+                | cards -> cards
+                            |> List.filter isOdd
+                            |> List.length
+            x.CheckMaxScore (game, player, score)
 
         member x.CheckDifferentColors(game: Game, player: Player) =
             let score (player: Player) = player.Tableau.Cards |> List.groupBy (fun card -> card.Color) |> List.length
