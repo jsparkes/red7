@@ -146,3 +146,20 @@ let ``Rule CheckMostNumber`` () =
     Assert.AreEqual(1y, card1)
     let card2 = Deck.Empty.LowestCard()
     Assert.AreEqual(0y, card2)
+
+[<Test>]
+let ``Rule LongestSequence`` () =
+    let src1 = Deck.Random.Cards
+    let l1 = Rule.LongestSequence src1
+    Assert.AreEqual(7, l1)
+    let l2 = Rule.LongestSequence List.empty<Card>
+    Assert.AreEqual(0, l2)
+    let cards = [
+                    Card(CardColor.Red, 1y)
+                    Card(CardColor.Yellow, 2y)
+                    Card(CardColor.Violet, 3y)
+                    Card(CardColor.Green, 5y)
+    ]
+    let l3 = Rule.LongestSequence cards
+    Assert.AreEqual(3, l3)
+

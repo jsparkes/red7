@@ -25,10 +25,10 @@ module Library =
 
     let CardColors = [1..7] |> List.map enum<CardColor>
 
-    type CardNumber(n : int8) =
+    type CardNumber(n : sbyte) =
         member val Number = n
 
-    type Card(color: CardColor, num: int8) =
+    type Card(color: CardColor, num: sbyte) =
         member val Color = color
         member val Number = CardNumber num
 
@@ -242,7 +242,39 @@ module Library =
                             |> List.length
             x.CheckMaxScore (game, player, score)
 
-        member x.CheckSequence(game: Game, player: Player) = false
+        static member LongestSequence (cards: List<Card>) =
+            let byNumber (card: Card) = card.Number.Number
+
+            let rec sequenceCount acc (cards: List<Card>) value =
+                match cards with
+                | [] -> acc
+                | cs -> if (List.head cs).Number.Number = value then
+                            sequenceCount (acc + 1) (List.tail cs) (value + 1y)
+                        else
+                            acc
+
+            let rec sequenceCounts (cards: List<Card>) =
+                match cards with
+                | [] -> [ 0 ]
+                | card :: rest ->
+                    let count = sequenceCount 1 rest (1y + card.Number.Number)
+                    // Skip over the first sequence for the tail
+                    count :: sequenceCounts (List.skip (count - 1) rest)
+
+            cards 
+            |> Seq.ofList
+            |> Seq.distinctBy byNumber
+            |> Seq.sortBy byNumber
+            |> List.ofSeq
+            |> sequenceCounts 
+            |> List.max
+
+        member x.CheckSequence(game: Game, player: Player) =
+            let score (player: Player) = 
+                match player.Tableau.Cards with 
+                | [] -> 0
+                | cards -> Rule.LongestSequence cards
+            x.CheckMaxScore (game, player, score)
 
         member x.CheckBelowFour(game: Game, player: Player) =
             let score (player: Player) =
