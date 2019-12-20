@@ -234,7 +234,12 @@ module Library =
             x.CheckMaxScore (game, player, score)
 
         member x.CheckDifferentColors(game: Game, player: Player) =
-            let score (player: Player) = player.Tableau.Cards |> List.groupBy (fun card -> card.Color) |> List.length
+            let score (player: Player) = 
+                match player.Tableau.Cards with 
+                | [] -> 0
+                | cards -> cards
+                            |> List.groupBy (fun card -> card.Color)
+                            |> List.length
             x.CheckMaxScore (game, player, score)
 
         member x.CheckSequence(game: Game, player: Player) = false
