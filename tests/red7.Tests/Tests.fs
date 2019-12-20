@@ -128,11 +128,21 @@ let ``Rule CheckHighest`` () =
             Assert.IsFalse(rule.Check(game1, player))
 
 [<Test>]
-let ``Rule CheckMost`` () =
+let ``Rule CheckMostColors`` () =
     let src = Deck.Random
     let dst = Deck.Empty
     for i in 1..20 do
         src.Cards |> List.item i |> dst.AddCard
-    let c = dst.CountColors()
-    c = 5
+    let group = dst.Cards |> List.groupBy (fun card -> card.Color)
+    let counts = group |> List.map (fun cards -> List.length (snd cards))
+    let max = List.max counts
+    ()
+    // let c = dst.CountColors()
+    // c = 5
 
+[<Test>]
+let ``Rule CheckMostNumber`` () =
+    let card1 = Deck.Random.LowestCard()
+    Assert.AreEqual(1y, card1)
+    let card2 = Deck.Empty.LowestCard()
+    Assert.AreEqual(0y, card2)
