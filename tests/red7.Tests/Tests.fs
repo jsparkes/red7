@@ -122,30 +122,47 @@ let ``Rule CheckHighest`` () =
         [for player in game1.Players -> player.Hand.HighestCard()]
         |> List.max
     for player in game1.Players do
-        if max = player.Hand.HighestCard() then
+        let high = player.Hand.HighestCard()
+        if max = high then
             Assert.IsTrue(rule.Check(game1, player))
         else
             Assert.IsFalse(rule.Check(game1, player))
 
 [<Test>]
 let ``Rule CheckMostColors`` () =
-    let src = Deck.Random
-    let dst = Deck.Empty
-    for i in 1..20 do
-        src.Cards |> List.item i |> dst.AddCard
-    let group = dst.Cards |> List.groupBy (fun card -> card.Color)
-    let counts = group |> List.map (fun cards -> List.length (snd cards))
-    let max = List.max counts
-    ()
-    // let c = dst.CountColors()
-    // c = 5
+    let cards = Deck.Random.Cards |> List.take 20
+    let counts = System.Collections.Generic.Dictionary<CardColor, int>()
+    let getCount (dict: System.Collections.Generic.Dictionary<CardColor, int>) key =
+        match dict.ContainsKey(key) with
+        | false -> 0
+        | true -> dict.[key]
+    // Choosing an alternative to groupBy, which is in the implementation
+    cards |> List.iter (fun card ->
+                            let n = getCount counts card.Color
+                            counts.[card.Color] <- n + 1)
+    let most = [ for pair in counts do yield pair.Value ]
+               |> List.ofSeq
+               |> List.max
+    let ruleValue = Rule.CountLargestGroup cards (fun card -> card.Color)
+    Assert.AreEqual(most, ruleValue)
 
 [<Test>]
 let ``Rule CheckMostNumber`` () =
-    let card1 = Deck.Random.LowestCard()
-    Assert.AreEqual(1y, card1)
-    let card2 = Deck.Empty.LowestCard()
-    Assert.AreEqual(0y, card2)
+    let cards = Deck.Random.Cards |> List.take 20
+    let counts = System.Collections.Generic.Dictionary<CardNumber, int>()
+    let getCount (dict: System.Collections.Generic.Dictionary<CardNumber, int>) key =
+        match dict.ContainsKey(key) with
+        | false -> 0
+        | true -> dict.[key]
+    // Choosing an alternative to groupBy, which is in the implementation
+    cards |> List.iter (fun card ->
+                            let n = getCount counts card.Number
+                            counts.[card.Number] <- n + 1)
+    let most = [ for pair in counts do yield pair.Value ]
+               |> List.ofSeq
+               |> List.max
+    let ruleValue = Rule.CountLargestGroup cards (fun card -> card.Number)
+    Assert.AreEqual(most, ruleValue)
 
 [<Test>]
 let ``Rule LongestSequence`` () =

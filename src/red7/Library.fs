@@ -91,8 +91,8 @@ module Library =
             match x.Cards with
             | [] -> x.DeckEmpty()
             | top::rest ->
-                x.Cards <- rest
                 player.ReceiveCard(top)
+                x.Cards <- rest
 
         member x.DeckEmpty() = ()
 
@@ -195,22 +195,22 @@ module Library =
             let max = map |> Map.toList |> List.map snd |> List.max
             max = map.[player]
 
-        member private x.CountLargestGroup (player: Player) groupFn =
-            match player.Tableau.Cards with
+        static member CountLargestGroup (cards: List<Card>) groupFn =
+            match cards with
             | [] -> 0
-            | cards -> cards
+            | cs -> cs
                         |> List.groupBy groupFn
                         |> List.map (fun cards -> List.length (snd cards))
                         |> List.max
 
         member x.CheckMostNumber(game: Game, player: Player) =
             let score (player: Player) =
-                x.CountLargestGroup player (fun card -> card.Number)
+                Rule.CountLargestGroup player.Tableau.Cards (fun card -> card.Number)
             x.CheckMaxScore (game, player, score)
 
         member x.CheckMostColor(game: Game, player: Player) =
             let score (player: Player) =
-                x.CountLargestGroup player (fun card -> card.Color)
+                Rule.CountLargestGroup player.Tableau.Cards (fun card -> card.Color)
             x.CheckMaxScore (game, player, score)
 
         member x.CheckMostEven(game: Game, player: Player) =
