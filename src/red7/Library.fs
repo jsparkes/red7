@@ -179,6 +179,7 @@ module Library =
             | CardColor.Blue -> x.CheckDifferentColors(game, player)
             | CardColor.Indigo -> x.CheckSequence(game, player)
             | CardColor.Violet -> x.CheckBelowFour(game, player)
+            | _ -> false
 
         member x.CheckHighest(game: Game, player: Player) =
             // I could have done this in one pipeline, but this is clearer.
