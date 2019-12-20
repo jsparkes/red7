@@ -195,8 +195,24 @@ module Library =
             let max = map |> Map.toList |> List.map snd |> List.max
             max = map.[player]
 
-        member x.CheckMostNumber(game: Game, player: Player) = false
-        member x.CheckMostColor(game: Game, player: Player) = false
+        member private x.CountLargestGroup (player: Player) groupFn =
+            match player.Tableau.Cards with
+            | [] -> 0
+            | cards -> cards
+                        |> List.groupBy groupFn
+                        |> List.map (fun cards -> List.length (snd cards))
+                        |> List.max
+
+        member x.CheckMostNumber(game: Game, player: Player) =
+            let score (player: Player) =
+                x.CountLargestGroup player (fun card -> card.Number)
+            x.CheckMaxScore (game, player, score)
+
+        member x.CheckMostColor(game: Game, player: Player) =
+            let score (player: Player) =
+                x.CountLargestGroup player (fun card -> card.Color)
+            x.CheckMaxScore (game, player, score)
+
         member x.CheckMostEven(game: Game, player: Player) =
             let isEven (card: Card) = card.Number.Number &&& 1y = 0y
             let score (player: Player) =
