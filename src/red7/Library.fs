@@ -96,22 +96,16 @@ module Library =
 
         member x.DeckEmpty() = ()
 
+        static member ConvertToValues(cards: List<Card>) =
+            match cards with
+            | [] -> [ 0y ]
+            | cs -> cs |> List.map (fun c -> c.Number.Number)
+
         member x.HighestCard() =
-            match x.Cards with
-            | [] -> 0y
-            | cards -> cards
-                            |> List.map (fun c -> - c.Number.Number)
-                            |> List.sort
-                            |> List.head
-                            |> (fun n -> - n)
+            Deck.ConvertToValues (x.Cards) |> List.max
 
         member x.LowestCard() =
-            match x.Cards with
-            | [] -> 0y
-            | cards -> cards
-                            |> List.map (fun c -> c.Number.Number)
-                            |> List.sort
-                            |> List.head
+            Deck.ConvertToValues (x.Cards) |> List.min
 
         member x.CountDifferentColors() =
             x.Cards |> List.groupBy (fun card -> card.Color) |> List.length
