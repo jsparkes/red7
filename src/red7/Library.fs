@@ -15,17 +15,15 @@ module Library =
 
     // In order from lowest to highest
     type CardColor =
-    | Violet
-    | Indigo
-    | Blue
-    | Green
-    | Yellow
-    | Orange
-    | Red
+    | Violet = 1
+    | Indigo = 2
+    | Blue = 3
+    | Green = 4
+    | Yellow = 5
+    | Orange = 6
+    | Red = 7
 
-    let CardColors = [  CardColor.Violet; CardColor.Indigo; CardColor.Blue;
-                        CardColor.Green; CardColor.Yellow; CardColor.Orange;
-                        CardColor.Red ]
+    let CardColors = [1..7] |> List.map enum<CardColor>
 
     type CardNumber(n : int8) =
         member val Number = n
