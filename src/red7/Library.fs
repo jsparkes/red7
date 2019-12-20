@@ -194,7 +194,7 @@ module Library =
             | [] -> 0
             | cs -> cs
                         |> List.groupBy groupFn
-                        |> List.map (fun cards -> List.length (snd cards))
+                        |> List.map (snd >> List.length) // (fun cards -> List.length (snd cards))
                         |> List.max
 
         member x.CheckMostNumber(game: Game, player: Player) =
