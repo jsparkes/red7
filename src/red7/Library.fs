@@ -72,10 +72,8 @@ module Library =
         static member Empty =
             Deck List.empty<Card>
 
-        member x.Top() = 
-            match x.Cards with
-            | [] -> None
-            | c -> Some (List.head c)
+        member x.Top() =
+            List.tryHead x.Cards
 
         member x.Contains(card) =
             x.Cards.Contains(card)
