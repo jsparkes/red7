@@ -274,3 +274,8 @@ module Library =
                             |> List.filter (fun card -> card.Number.Number < 4y)
                             |> List.length
             x.CheckMaxScore (game, player, score)
+
+        member x.IsValidMove(game: Game, player: Player, card: Card) =
+            let p = player
+            p.PlayACard(card)
+            x.Check(game, p)
