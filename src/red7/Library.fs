@@ -253,11 +253,9 @@ module Library =
                     // Skip over the first sequence for the tail
                     count :: sequenceCounts (List.skip (count - 1) rest)
 
-            cards 
-            |> Seq.ofList
-            |> Seq.distinctBy byNumber
-            |> Seq.sortBy byNumber
-            |> List.ofSeq
+            cards
+            |> List.distinctBy byNumber
+            |> List.sortBy byNumber
             |> sequenceCounts 
             |> List.max
 
