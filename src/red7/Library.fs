@@ -149,9 +149,7 @@ module Library =
 
         member val Players = List<Player>.Empty with get, set 
         member val Deck = Deck.Random with get, set
-        // This doesn't really have to be a stack.
-        // We could just save the topmost card.
-        member val Rule = List.empty<Card> with get, set
+        member val Rule = Rule(None) with get, set
 
         member x.Start() =
             x.Players <- [ for i in 1..numOfPlayers ->
@@ -160,18 +158,21 @@ module Library =
                 for j in 0..6 do
                     x.Deck.DealACard p
 
-    and Rule(card: Card) =
+    and Rule(card: Card option) =
 
         member x.Check(game: Game, player: Player) =
-            match card.Color with
-            | CardColor.Red -> x.CheckHighest(game, player)
-            | CardColor.Orange -> x.CheckMostNumber(game, player)
-            | CardColor.Yellow -> x.CheckMostColor(game, player)
-            | CardColor.Green -> x.CheckMostEven(game, player)
-            | CardColor.Blue -> x.CheckDifferentColors(game, player)
-            | CardColor.Indigo -> x.CheckSequence(game, player)
-            | CardColor.Violet -> x.CheckBelowFour(game, player)
-            | _ -> false
+            match card with
+            | None -> x.CheckHighest(game, player)
+            | Some c ->
+                match c.Color with
+                | CardColor.Red -> x.CheckHighest(game, player)
+                | CardColor.Orange -> x.CheckMostNumber(game, player)
+                | CardColor.Yellow -> x.CheckMostColor(game, player)
+                | CardColor.Green -> x.CheckMostEven(game, player)
+                | CardColor.Blue -> x.CheckDifferentColors(game, player)
+                | CardColor.Indigo -> x.CheckSequence(game, player)
+                | CardColor.Violet -> x.CheckBelowFour(game, player)
+                | _ -> false
 
         member x.CheckHighest(game: Game, player: Player) =
             // I could have done this in one pipeline, but this is clearer.
